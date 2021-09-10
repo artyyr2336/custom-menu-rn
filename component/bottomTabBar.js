@@ -1,12 +1,22 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
-import React from 'react';
-import {Pressable, View} from 'react-native';
+import React, {useRef} from 'react';
+import {Animated, Pressable, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Icon} from './icon';
 
 export const BottomTabBarMenu = ({state, navigation}) => {
+  const buttonSize = useRef(new Animated.Value(1));
+
+  const handlePress = () => {
+    Animated.sequence([
+      Animated.timing(buttonSize, {
+        toValue: 0.95,
+      }),
+    ]);
+  };
+
   const renderItem = ({name}, index) => {
     const isFocused = state.index === index;
 
@@ -24,7 +34,7 @@ export const BottomTabBarMenu = ({state, navigation}) => {
             ? {
                 width: 60,
                 height: 60,
-                backgroundColor: isFocused ? '#c20047' : '#d92768',
+                backgroundColor: !isFocused ? 'red' : '#d92768',
                 borderRadius: 50,
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -34,24 +44,28 @@ export const BottomTabBarMenu = ({state, navigation}) => {
                 width: 40,
                 height: 40,
                 borderRadius: 8,
-                backgroundColor: isFocused ? '#0772b0' : '#2798d9',
+                backgroundColor: isFocused ? 'red' : 'gray',
                 alignItems: 'center',
                 justifyContent: 'center',
               }
         }
         onPress={onPress}>
-        <Icon name={`tabBar${name}`} size={20} color={'#fff'} />
+        <Icon
+          name={`tabBar${name}`}
+          size={20}
+          color={isFocused ? '#fff' : name === 'News' ? '#fff' : 'gray'}
+        />
       </Pressable>
     );
   };
 
   return (
-    <SafeAreaView style={{flex: 0, paddingHorizontal: 10}}>
+    <SafeAreaView style={{flex: 0, padding: 15}}>
       <View
         jc="space-between"
         style={{
           marginVertical: 6,
-          backgroundColor: '#44b9fc',
+          backgroundColor: '#fff',
           padding: 6,
           borderRadius: 12,
           width: '100%',
